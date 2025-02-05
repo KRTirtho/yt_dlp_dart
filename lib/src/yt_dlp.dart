@@ -83,9 +83,10 @@ class YtDlp {
   Future<Map<String, dynamic>> extractInfo(
     String url, {
     String formatSpecifiers = "'%()j'", // dumps all the info
+    List<String> extraArgs = const [],
   }) async {
     return jsonDecode(
-      await _executeString(["--print", formatSpecifiers, url]),
+      await _executeString(["--print", formatSpecifiers, ...extraArgs, url]),
     );
   }
 }
