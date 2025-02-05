@@ -1,10 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:dio/dio.dart';
-import 'package:yt_dlp_dart/src/links.dart';
-import 'package:yt_dlp_dart/src/utils.dart';
 
 typedef ExecutorFn = Future<String> Function(List<String> args);
 
@@ -12,8 +7,6 @@ class YtDlp {
   static final instance = YtDlp._();
 
   YtDlp._();
-
-  final _dio = Dio();
 
   File? _binaryLocation;
   ExecutorFn? _customExecutor;
@@ -61,37 +54,6 @@ class YtDlp {
     }
 
     _binaryLocation = file;
-  }
-
-  /// Downloads yt-dlp for the current platform
-  /// outputs the bytes of the downloaded file
-  Future<Uint8List> download(String version) async {
-    final links = getYtDlpDownloadUrls(version);
-    final os = Platform.operatingSystem;
-    final arch = abiToCpuArch();
-    final downloadUrl = links[os]?[arch];
-
-    assert(downloadUrl != null, 'Unsupported platform: $os $arch');
-
-    final response = await _dio.get(
-      downloadUrl!,
-      options: Options(
-        responseType: ResponseType.bytes,
-        followRedirects: true,
-      ),
-    );
-
-    return response.data as Uint8List;
-  }
-
-  /// Saves the yt-dlp binary to the specified path
-  /// and sets the binary location
-  Future<void> save(Uint8List binary, String path) async {
-    final file = File(path);
-
-    await file.writeAsBytes(binary);
-
-    await setBinaryLocation(path);
   }
 
   Future<String> _executeString(List<String> args) async {
