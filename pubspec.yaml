@@ -6,9 +6,6 @@ version: 1.0.0
 environment:
   sdk: ^3.6.1
 
-# Add regular dependencies here.
-dependencies:
-  dio: ^5.8.0+1
 
 dev_dependencies:
   lints: ^5.0.0
