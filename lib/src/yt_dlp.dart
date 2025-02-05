@@ -21,6 +21,13 @@ class YtDlp {
     return _binaryLocation!;
   }
 
+  Future<bool> checkAvailableInPath() async {
+    return await _expandFromEnvPath(
+          "yt-dlp${Platform.isWindows ? '.exe' : ''}",
+        ) !=
+        null;
+  }
+
   Future<String?> _expandFromEnvPath(String binary) async {
     if (binary.contains("/") || binary.contains("\\")) {
       return null;
