@@ -87,13 +87,31 @@ class YtDlp {
     return output.split("\n").map((e) => e.trim()).toList();
   }
 
-  Future<Map<String, dynamic>> extractInfo(
+  Future extractInfo(
     String url, {
     String formatSpecifiers = "'%()j'", // dumps all the info
     List<String> extraArgs = const [],
   }) async {
-    return jsonDecode(
-      await _executeString(["--print", formatSpecifiers, ...extraArgs, url]),
+    final output = await extractInfoString(
+      url,
+      formatSpecifiers: formatSpecifiers,
+      extraArgs: extraArgs,
+    );
+
+    try {
+      return jsonDecode(output);
+    } catch (e) {
+      throw Exception("Failed to parse yt-dlp output: $output");
+    }
+  }
+
+  Future<String> extractInfoString(
+    String url, {
+    String formatSpecifiers = "'%()j'", // dumps all the info
+    List<String> extraArgs = const [],
+  }) async {
+    return await _executeString(
+      ["--print", formatSpecifiers, ...extraArgs, url],
     );
   }
 }
