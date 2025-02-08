@@ -17,7 +17,7 @@ class YtDlp {
   }
 
   File get binaryLocation {
-    assert(_binaryLocation == null, 'YtDlp binary location is not set');
+    assert(_binaryLocation != null, 'YtDlp binary location is not set');
 
     return _binaryLocation!;
   }
