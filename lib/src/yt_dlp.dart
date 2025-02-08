@@ -10,6 +10,7 @@ class YtDlp {
 
   File? _binaryLocation;
   ExecutorFn? _customExecutor;
+  bool runInShell = false;
 
   void setCustomExecutor(ExecutorFn executor) {
     _customExecutor = executor;
@@ -71,6 +72,7 @@ class YtDlp {
     final result = await Process.run(
       binaryLocation.path,
       args,
+      runInShell: runInShell,
     );
 
     return result.stdout.toString();
