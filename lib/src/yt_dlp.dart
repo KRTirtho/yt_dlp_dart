@@ -73,9 +73,22 @@ class YtDlp {
       binaryLocation.path,
       args,
       runInShell: runInShell,
+      // yt-dlp may create temp files, so we set the working directory to a writable temp dir
+      workingDirectory: Directory.systemTemp.path,
     );
 
-    return result.stdout.toString();
+    final stdOut = result.stdout.toString();
+    final stdErr = result.stderr.toString();
+
+    if (stdErr.isNotEmpty && stdOut.isEmpty) {
+      throw Exception(
+        "yt-dlp command failed with exit code ${result.exitCode}\n"
+        "STDOUT: $stdOut\n"
+        "STDERR: $stdErr",
+      );
+    }
+
+    return stdOut;
   }
 
   /// Returns the version of the yt-dlp binary
